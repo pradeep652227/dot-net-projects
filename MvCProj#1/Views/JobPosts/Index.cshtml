@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model List<JobPostsModel>
+<div>
+    <a asp-action="Create">Create a Job</a>
+    <h1>These are the jobs:-</h1>
+    <select id="jobSelect" onchange="onClickSelect()">
+        <option value="">Select A Job</option>
+        @foreach (JobPostsModel job in Model)
+        {
+            <option value="@job.Id">@job.JobTitle</option>
+        }
+    </select>
+    <!--Filtered Jobs-->
+    <ul id="jobList">
+        @foreach (JobPostsModel job in Model)
+        {
+            <li class="job-item" id="@job.Id" data-id="@job.Id">
+                <a asp-action="job" asp-route-id="@job.Id">@job.JobTitle</a> | <a asp-action="edit" asp-route-id="@job.Id">Edit</a> |
+                <a asp-action="delete" asp-route-id="@job.Id">Delete</a>
+            </li>
+        }
+    </ul>
+
+</div>
+@section Scripts {
+    <script type="text/javascript" src="~/js/jobsView.js"></script>
+}
+

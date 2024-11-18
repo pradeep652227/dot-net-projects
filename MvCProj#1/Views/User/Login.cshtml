@@ -1,0 +1,16 @@
+﻿@model MvCProj_1.Models.Authentication.UserLoginModel;
+@{
+    ViewData["Title"] = "User Login";
+}
+
+    <form method="post">
+        <div>
+            <label asp-for="Email"></label>
+            <input type="email" asp-for="Email" />
+        </div>
+    <div>
+        <label asp-for="Password"></label>
+        <input type="password" asp-for="Password" />
+    </div>
+        <button type="submit">Login</button>
+    </form>
