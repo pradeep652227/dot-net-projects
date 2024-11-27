@@ -1,4 +1,4 @@
-﻿@model IEnumerable<BankingApplication.Models.User>
+﻿@model IEnumerable<BankingApplication.Models.Non_Table_Models.Users.User_AccountType>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,31 +13,31 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.user.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.user.FirstName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.user.LastName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleId)
+                @Html.DisplayNameFor(model => model.userRole)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.user.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Password)
+                @Html.DisplayNameFor(model => model.user.Password)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AccountType)
+                @Html.DisplayNameFor(model => model.user.AccountType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CurrentBalance)
+                @Html.DisplayNameFor(model => model.user.CurrentBalance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.BankId)
+                @Html.DisplayNameFor(model => model.userBank)
             </th>
             <th></th>
         </tr>
@@ -46,36 +46,36 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                    @Html.DisplayFor(modelItem => item.user.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                    @Html.DisplayFor(modelItem => item.user.FirstName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                    @Html.DisplayFor(modelItem => item.user.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RoleId)
+                    @Html.DisplayFor(modelItem => item.userRole)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                    @Html.DisplayFor(modelItem => item.user.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Password)
+                    @Html.DisplayFor(modelItem => item.user.Password)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AccountType)
+                     @item.accountType
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CurrentBalance)
+                @Html.DisplayFor(modelItem => item.user.CurrentBalance)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BankId)
+                @Html.DisplayFor(modelItem => item.userBank)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UserId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserId">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.user.UserId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.user.UserId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.user.UserId">Delete</a>
             </td>
         </tr>
 }

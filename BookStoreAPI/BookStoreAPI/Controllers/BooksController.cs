@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System;
 
 namespace BookStoreAPI.Controllers
 {
@@ -20,9 +21,16 @@ namespace BookStoreAPI.Controllers
         [HttpGet("")]
         public async Task<IActionResult> GetAllBooks()
         {
-            var books = await _bookRepo.GetAllBooksAsync();
+            try
+            {
+                var books = await _bookRepo.GetAllBooksAsync();
 
-            return Ok(books);
+                return Ok(books);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{Id:int}")]

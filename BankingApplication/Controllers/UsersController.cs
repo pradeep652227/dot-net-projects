@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BankingApplication.Data;
 using BankingApplication.Models;
+using BankingApplication.Models.Non_Table_Models.Users;
 
 namespace BankingApplication.Controllers
 {
@@ -22,7 +23,27 @@ namespace BankingApplication.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            IQueryable<User> users = _context.User;
+            IQueryable<AccountType> accountTypes = _context.AccountType;
+            IQueryable<Bank> banks = _context.Bank;
+            IQueryable<UserRole> userRoles= _context.UserRole;
+
+            var usersWithAccountType=(from us in users 
+                                     join at in accountTypes
+                                     on us.AccountType equals at.AccoutnTypeId
+                                     join bk in banks 
+                                     on us.BankId equals bk.BankId
+                                     join ur in userRoles
+                                     on us.RoleId equals ur.RoleId
+                                     select new User_AccountType()
+                                     {
+                                         user=us,
+                                         accountType=at.AccountTypeName,
+                                         userBank=bk.BankName,
+                                         userRole=ur.RoleName
+                                     }).ToList();   
+            
+            return View(usersWithAccountType);
         }
 
         // GET: Users/Details/5
@@ -34,7 +55,11 @@ namespace BankingApplication.Controllers
             }
 
             var user = await _context.User
+                .Include(u => u.Role)
+                .Include(u => u.Bank)
+                .Include(u => u.UserAccount)
                 .FirstOrDefaultAsync(m => m.UserId == id);
+                
             if (user == null)
             {
                 return NotFound();
@@ -46,7 +71,18 @@ namespace BankingApplication.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            return View();
+            IQueryable<Bank> banks = _context.Bank;
+            IQueryable<AccountType> accountTypes = _context.AccountType;
+            IQueryable<UserRole> userRoles = _context.UserRole;
+            var Users_BanksModel = new User_BanksModel_CreateView()
+            {
+                user = new User(),
+                banks = banks,
+                accountTypes=accountTypes,
+                userRoles=userRoles
+            };
+
+            return View(Users_BanksModel);
         }
 
         // POST: Users/Create
@@ -54,15 +90,27 @@ namespace BankingApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,UserName,FirstName,LastName,RoleId,Email,Password,AccountType,CurrentBalance,BankId")] User user)
+        public async Task<IActionResult> Create([FromForm] User user)
         {
+
             if (ModelState.IsValid)
             {
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            IQueryable<Bank> banks = _context.Bank;
+            IQueryable<AccountType> accountTypes = _context.AccountType;
+            IQueryable<UserRole> userRoles = _context.UserRole;
+            var Users_BanksModel = new User_BanksModel_CreateView()
+            {
+                user = new User(),
+                banks = banks,
+                accountTypes = accountTypes,
+                userRoles = userRoles
+            };
+
+            return View(Users_BanksModel);
         }
 
         // GET: Users/Edit/5
