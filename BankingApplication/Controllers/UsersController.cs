@@ -23,10 +23,10 @@ namespace BankingApplication.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            IQueryable<User> users = _context.User;
-            IQueryable<AccountType> accountTypes = _context.AccountType;
-            IQueryable<Bank> banks = _context.Bank;
-            IQueryable<UserRole> userRoles= _context.UserRole;
+            IQueryable<User> users = _context.Users;
+            IQueryable<AccountType> accountTypes = _context.AccountTypes;
+            IQueryable<Bank> banks = _context.Banks;
+            IQueryable<UserRole> userRoles= _context.UserRoles;
 
             var usersWithAccountType=(from us in users 
                                      join at in accountTypes
@@ -54,7 +54,7 @@ namespace BankingApplication.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .Include(u => u.Role)
                 .Include(u => u.Bank)
                 .Include(u => u.UserAccount)
@@ -71,9 +71,9 @@ namespace BankingApplication.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            IQueryable<Bank> banks = _context.Bank;
-            IQueryable<AccountType> accountTypes = _context.AccountType;
-            IQueryable<UserRole> userRoles = _context.UserRole;
+            IQueryable<Bank> banks = _context.Banks;
+            IQueryable<AccountType> accountTypes = _context.AccountTypes;
+            IQueryable<UserRole> userRoles = _context.UserRoles;
             var Users_BanksModel = new User_BanksModel_CreateView()
             {
                 user = new User(),
@@ -99,9 +99,9 @@ namespace BankingApplication.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            IQueryable<Bank> banks = _context.Bank;
-            IQueryable<AccountType> accountTypes = _context.AccountType;
-            IQueryable<UserRole> userRoles = _context.UserRole;
+            IQueryable<Bank> banks = _context.Banks;
+            IQueryable<AccountType> accountTypes = _context.AccountTypes;
+            IQueryable<UserRole> userRoles = _context.UserRoles;
             var Users_BanksModel = new User_BanksModel_CreateView()
             {
                 user = new User(),
@@ -121,7 +121,7 @@ namespace BankingApplication.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -172,7 +172,7 @@ namespace BankingApplication.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var user = await _context.Users
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
@@ -187,10 +187,10 @@ namespace BankingApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
+            var user = await _context.Users.FindAsync(id);
             if (user != null)
             {
-                _context.User.Remove(user);
+                _context.Users.Remove(user);
             }
 
             await _context.SaveChangesAsync();
@@ -199,7 +199,7 @@ namespace BankingApplication.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.User.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.UserId == id);
         }
     }
 }
