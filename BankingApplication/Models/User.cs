@@ -44,6 +44,8 @@ namespace BankingApplication.Models
 
         public int BankId { get; set; }
 
+        public int AddressId { get; set; }
+
         public DateTime AccountCreatedOn { get; set; } = DateTime.UtcNow;
 
         public string AccountStatus { get; set; } = (UserAccountStatus.PendingActivation).ToString();
@@ -58,6 +60,8 @@ namespace BankingApplication.Models
 
         [ForeignKey("AccountType")]
         public virtual AccountType? UserAccount { get; set; }
+
+        public virtual int? Address { get; set; }
 
     }
 }

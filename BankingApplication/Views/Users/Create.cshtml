@@ -1,17 +1,18 @@
-﻿@model BankingApplication.Models.Non_Table_Models.Users.User_BanksModel_CreateView
+﻿@model BankingApplication.Models.Non_Table_Models.Users.User_CreateView
 
 @{
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Create User</h1>
 
-<h4>User</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Create" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- User Fields -->
             <div class="form-group">
                 <label asp-for="user.UserName" class="control-label"></label>
                 <input asp-for="user.UserName" class="form-control" />
@@ -28,10 +29,50 @@
                 <span asp-validation-for="user.LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="user.Email" class="control-label"></label>
+                <input asp-for="user.Email" class="form-control" />
+                <span asp-validation-for="user.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="user.Password" class="control-label"></label>
+                <input asp-for="user.Password" class="form-control" type="password" />
+                <span asp-validation-for="user.Password" class="text-danger"></span>
+            </div>
+
+            <!-- Address Fields -->
+            <h4>Address Details</h4>
+            <div class="form-group">
+                <label asp-for="userAddress.city" class="control-label"></label>
+                <input asp-for="userAddress.city" class="form-control" />
+                <span asp-validation-for="userAddress.city" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userAddress.landMark" class="control-label"></label>
+                <input asp-for="userAddress.landMark" class="form-control" />
+                <span asp-validation-for="userAddress.landMark" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userAddress.state" class="control-label"></label>
+                <input asp-for="userAddress.state" class="form-control" />
+                <span asp-validation-for="userAddress.state" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="userAddress.pinCode" class="control-label"></label>
+                <input asp-for="userAddress.pinCode" class="form-control" />
+                <span asp-validation-for="userAddress.pinCode" class="text-danger"></span>
+            </div>            
+            <div class="form-group">
+                <label asp-for="userAddress.address" class="control-label"></label>
+                <input asp-for="userAddress.address" class="form-control" />
+                <span asp-validation-for="userAddress.address" class="text-danger"></span>
+            </div>
+
+            <!-- Dropdowns -->
+            <div class="form-group">
                 <label asp-for="user.RoleId" class="control-label"></label>
                 <select asp-for="user.RoleId" class="form-control">
-                    <option value="">Select A Role</option>
-                    @foreach(var role in Model.userRoles)
+                    <option value="">Select Role</option>
+                    @foreach (var role in Model.userRoles)
                     {
                         <option value="@role.RoleId">@role.RoleName</option>
                     }
@@ -39,40 +80,31 @@
                 <span asp-validation-for="user.RoleId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.Email" class="control-label"></label>
-                <input asp-for="user.Email" class="form-control" />
-                <span asp-validation-for="user.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="user.Password" class="control-label"></label>
-                <input asp-for="user.Password" class="form-control" />
-                <span asp-validation-for="user.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="user.AccountType" class="control-label"></label>
                 <select asp-for="user.AccountType" class="form-control">
                     <option value="">Select Account Type</option>
-                    @foreach(var type in Model.accountTypes)
+                    @foreach (var type in Model.accountTypes)
                     {
-                        <option value=@type.AccoutnTypeId>@type.AccountTypeName</option>
+                        <option value="@type.AccoutnTypeId">@type.AccountTypeName</option>
                     }
                 </select>
                 <span asp-validation-for="user.AccountType" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="user.BankId" class="control-label"></label>
-                @* <input asp-for="BankId" class="form-control" /> *@
                 <select asp-for="user.BankId" class="form-control">
-                    <option value="">Select A Bank</option>
-                    @foreach(var bank in Model.banks)
+                    <option value="">Select Bank</option>
+                    @foreach (var bank in Model.banks)
                     {
-                        <option value=@bank.BankId>@bank.BankName</option>
+                        <option value="@bank.BankId">@bank.BankName</option>
                     }
                 </select>
                 <span asp-validation-for="user.BankId" class="text-danger"></span>
             </div>
-            <div class="form-group mt-2">
-              <input type="submit" value="Create" class="btn btn-primary" />
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -83,5 +115,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

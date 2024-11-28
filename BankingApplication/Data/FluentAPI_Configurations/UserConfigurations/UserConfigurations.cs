@@ -46,4 +46,4 @@ namespace BankingApplication.Data.FluentAPI_Configurations.UserConfigurations
     }
 
 }
-}
+

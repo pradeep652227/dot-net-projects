@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BankingApplication.Data;
 using BankingApplication.Models;
 using BankingApplication.Models.Non_Table_Models.Users;
+using BankingApplication.Models.DTOs.UserDTOs;
 
 namespace BankingApplication.Controllers
 {
@@ -26,23 +27,23 @@ namespace BankingApplication.Controllers
             IQueryable<User> users = _context.Users;
             IQueryable<AccountType> accountTypes = _context.AccountTypes;
             IQueryable<Bank> banks = _context.Banks;
-            IQueryable<UserRole> userRoles= _context.UserRoles;
+            IQueryable<UserRole> userRoles = _context.UserRoles;
 
-            var usersWithAccountType=(from us in users 
-                                     join at in accountTypes
-                                     on us.AccountType equals at.AccoutnTypeId
-                                     join bk in banks 
-                                     on us.BankId equals bk.BankId
-                                     join ur in userRoles
-                                     on us.RoleId equals ur.RoleId
-                                     select new User_AccountType()
-                                     {
-                                         user=us,
-                                         accountType=at.AccountTypeName,
-                                         userBank=bk.BankName,
-                                         userRole=ur.RoleName
-                                     }).ToList();   
-            
+            var usersWithAccountType = (from us in users
+                                        join at in accountTypes
+                                        on us.AccountType equals at.AccoutnTypeId
+                                        join bk in banks
+                                        on us.BankId equals bk.BankId
+                                        join ur in userRoles
+                                        on us.RoleId equals ur.RoleId
+                                        select new User_AccountType()
+                                        {
+                                            user = us,
+                                            accountType = at.AccountTypeName,
+                                            userBank = bk.BankName,
+                                            userRole = ur.RoleName
+                                        }).ToList();
+
             return View(usersWithAccountType);
         }
 
@@ -59,7 +60,7 @@ namespace BankingApplication.Controllers
                 .Include(u => u.Bank)
                 .Include(u => u.UserAccount)
                 .FirstOrDefaultAsync(m => m.UserId == id);
-                
+
             if (user == null)
             {
                 return NotFound();
@@ -74,12 +75,13 @@ namespace BankingApplication.Controllers
             IQueryable<Bank> banks = _context.Banks;
             IQueryable<AccountType> accountTypes = _context.AccountTypes;
             IQueryable<UserRole> userRoles = _context.UserRoles;
-            var Users_BanksModel = new User_BanksModel_CreateView()
+            var Users_BanksModel = new User_CreateView()
             {
                 user = new User(),
                 banks = banks,
-                accountTypes=accountTypes,
-                userRoles=userRoles
+                accountTypes = accountTypes,
+                userRoles = userRoles,
+                userAddress = new Address()
             };
 
             return View(Users_BanksModel);
@@ -87,27 +89,38 @@ namespace BankingApplication.Controllers
 
         // POST: Users/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([FromForm] User user)
+        public async Task<IActionResult> Create( User_CreateViewDTO userWithAddress)
         {
 
             if (ModelState.IsValid)
             {
+                var user = userWithAddress.user;
+                var address = userWithAddress.userAddress;
+
+                _context.Add(address);
+                await _context.SaveChangesAsync();
+
+                user.AddressId = address.addressId;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
+
+                address.userId = user.UserId;
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             IQueryable<Bank> banks = _context.Banks;
             IQueryable<AccountType> accountTypes = _context.AccountTypes;
             IQueryable<UserRole> userRoles = _context.UserRoles;
-            var Users_BanksModel = new User_BanksModel_CreateView()
+            var Users_BanksModel = new User_CreateView()
             {
                 user = new User(),
                 banks = banks,
                 accountTypes = accountTypes,
-                userRoles = userRoles
+                userRoles = userRoles,
+                userAddress = new Address()
             };
 
             return View(Users_BanksModel);
