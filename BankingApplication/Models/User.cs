@@ -15,7 +15,7 @@ namespace BankingApplication.Models
         public string UserName { get; set; }
         [Required]
 
-        [Display(Name ="First Name")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required]
 
@@ -48,12 +48,14 @@ namespace BankingApplication.Models
 
         public string AccountStatus { get; set; } = (UserAccountStatus.PendingActivation).ToString();
 
+        public DateTime PaymentUpdatedOn { get; set; } = DateTime.UtcNow;
+
         [ForeignKey("RoleId")]
         public virtual UserRole? Role { get; set; }
 
         [ForeignKey("BankId")]
-        public virtual Bank? Bank{ get; set; }        
-        
+        public virtual Bank? Bank { get; set; }
+
         [ForeignKey("AccountType")]
         public virtual AccountType? UserAccount { get; set; }
 

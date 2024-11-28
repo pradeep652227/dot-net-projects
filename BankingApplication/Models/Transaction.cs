@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BankingApplication.Models
 {
-    public class Transactions
+    public class Transaction
     {
         public int TransactionId { get; set; }
         [Required]

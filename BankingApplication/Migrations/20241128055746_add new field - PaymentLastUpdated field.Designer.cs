@@ -4,6 +4,7 @@ using BankingApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BankingApplication.Migrations
 {
     [DbContext(typeof(BankingApplicationContext))]
-    partial class BankingApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241128055746_add new field - PaymentLastUpdated field")]
+    partial class addnewfieldPaymentLastUpdatedfield
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,42 +40,6 @@ namespace BankingApplication.Migrations
                     b.HasKey("AccoutnTypeId");
 
                     b.ToTable("AccountType");
-                });
-
-            modelBuilder.Entity("BankingApplication.Models.Address", b =>
-                {
-                    b.Property<int>("addressId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("addressId"));
-
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("city")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("landMark")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("pinCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("state")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
-
-                    b.HasKey("addressId");
-
-                    b.ToTable("Address");
                 });
 
             modelBuilder.Entity("BankingApplication.Models.Bank", b =>
@@ -110,62 +77,6 @@ namespace BankingApplication.Migrations
                     b.HasKey("BankId");
 
                     b.ToTable("Bank");
-                });
-
-            modelBuilder.Entity("BankingApplication.Models.Transaction", b =>
-                {
-                    b.Property<int>("TransactionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionId"));
-
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
-
-                    b.Property<string>("FromUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FromUserCurrentBalance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Remarks")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ToUserCurrentBalance")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TransactionTypeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("TransactionId");
-
-                    b.ToTable("Transaction");
-                });
-
-            modelBuilder.Entity("BankingApplication.Models.TransactionType", b =>
-                {
-                    b.Property<int>("TransactionTypeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TransactionTypeId"));
-
-                    b.Property<string>("TransactionTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("TransactionTypeId");
-
-                    b.ToTable("TransactionType");
                 });
 
             modelBuilder.Entity("BankingApplication.Models.User", b =>
