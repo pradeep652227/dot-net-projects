@@ -5,19 +5,19 @@ namespace BankingApplication.Models
 {
     public class Transaction
     {
-        public int TransactionId { get; set; }
+        public int transactionId { get; set; }
         [Required]
-        public int TransactionTypeId { get; set; }
+        public int transactionTypeId { get; set; }
         [Required]
-        public string FromUser { get; set; }
+        public string fromUser { get; set; }
         [Required]
-        public string ToUser { get; set; }
+        public string toUser { get; set; }
         [Range(5000,100000)]
 
-        public float Amount { get; set; }
+        public float amount { get; set; }
         [Required]
-        public string Remarks { get; set; }
-        public string FromUserCurrentBalance { get; set; }
-        public string ToUserCurrentBalance { get; set; }
+        public string remarks { get; set; }
+        public string fromUserCurrentBalance { get; set; }
+        public string toUserCurrentBalance { get; set; }
     }
 }

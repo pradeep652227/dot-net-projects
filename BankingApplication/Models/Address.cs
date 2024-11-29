@@ -23,5 +23,7 @@ namespace BankingApplication.Models
         [Required]
         [DisplayName("Address")]
         public string address { get; set; }
+
+        public ICollection<User>? users { get; set; }    
     }
 }

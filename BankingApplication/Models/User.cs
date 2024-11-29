@@ -8,60 +8,60 @@ namespace BankingApplication.Models
     public class User
     {
         [Key]//give primary key to a key of your choice usign [Key] attribute
-        public int UserId { get; set; }
+        public int userId { get; set; }
         [Required]
 
         [Display(Name = "User Name")]
-        public string UserName { get; set; }
+        public string userName { get; set; }
         [Required]
 
         [Display(Name = "First Name")]
-        public string FirstName { get; set; }
+        public string firstName { get; set; }
         [Required]
 
         [Display(Name = "Last Name")]
-        public string LastName { get; set; }
+        public string lastName { get; set; }
 
         [Required]
         [Display(Name = "Role")]
-        public int RoleId { get; set; }
+        public int roleId { get; set; }
         [Required]
 
-        public string Email { get; set; }
+        public string email { get; set; }
         [Required]
 
-        public string Password { get; set; }
+        public string password { get; set; }
         [Required]
 
         [Display(Name = "Account Type")]
-        public int AccountType { get; set; }
+        public int accountType { get; set; }
 
 
         [Display(Name = "Current Balance")]
-        public float? CurrentBalance { get; set; } = 0.0F;
+        public float? currentBalance { get; set; } = 0.0F;
 
         [Display(Name = "Bank")]
 
-        public int BankId { get; set; }
+        public int bankId { get; set; }
 
-        public int AddressId { get; set; }
+        public int addressId { get; set; }
 
-        public DateTime AccountCreatedOn { get; set; } = DateTime.UtcNow;
+        public DateTime accountCreatedOn { get; set; } = DateTime.UtcNow;
 
-        public string AccountStatus { get; set; } = (UserAccountStatus.PendingActivation).ToString();
+        public string accountStatus { get; set; } = (UserAccountStatus.PendingActivation).ToString();
 
-        public DateTime PaymentUpdatedOn { get; set; } = DateTime.UtcNow;
+        public DateTime paymentUpdatedOn { get; set; } = DateTime.UtcNow;
 
-        [ForeignKey("RoleId")]
+
         public virtual UserRole? Role { get; set; }
 
-        [ForeignKey("BankId")]
+ 
         public virtual Bank? Bank { get; set; }
 
-        [ForeignKey("AccountType")]
+
         public virtual AccountType? UserAccount { get; set; }
 
-        public virtual int? Address { get; set; }
+        public virtual Address? Address { get; set; }
 
     }
 }

@@ -2,8 +2,8 @@
 {
     public class TransactionType
     {
-        public int TransactionTypeId { get; set; }
-        public string TransactionTypeName { get; set; }
+        public int transactionTypeId { get; set; }
+        public string transactionTypeName { get; set; }
 
     }
 }

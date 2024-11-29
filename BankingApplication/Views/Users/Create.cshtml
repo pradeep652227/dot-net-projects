@@ -2,41 +2,51 @@
 
 @{
     ViewData["Title"] = "Create";
+    var pageMethod = ViewData["Method"];
 }
 
-<h1>Create User</h1>
+<h1>@pageMethod User</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-6">
-        <form asp-action="Create" method="post">
+        <form asp-action="@pageMethod" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!--Hidden Fields-->
+            @if (pageMethod=="Edit")
+            {
+                <input type="hidden" asp-for="user.userId" />
+                <input type="hidden" asp-for="user.addressId" />
+                <input type="hidden" asp-for="userAddress.addressId" />
+            }
+
 
             <!-- User Fields -->
             <div class="form-group">
-                <label asp-for="user.UserName" class="control-label"></label>
-                <input asp-for="user.UserName" class="form-control" />
-                <span asp-validation-for="user.UserName" class="text-danger"></span>
+                <label asp-for="user.userName" class="control-label"></label>
+                <input asp-for="user.userName" class="form-control" />
+                <span asp-validation-for="user.userName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.FirstName" class="control-label"></label>
-                <input asp-for="user.FirstName" class="form-control" />
-                <span asp-validation-for="user.FirstName" class="text-danger"></span>
+                <label asp-for="user.firstName" class="control-label"></label>
+                <input asp-for="user.firstName" class="form-control" />
+                <span asp-validation-for="user.firstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.LastName" class="control-label"></label>
-                <input asp-for="user.LastName" class="form-control" />
-                <span asp-validation-for="user.LastName" class="text-danger"></span>
+                <label asp-for="user.lastName" class="control-label"></label>
+                <input asp-for="user.lastName" class="form-control" />
+                <span asp-validation-for="user.lastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.Email" class="control-label"></label>
-                <input asp-for="user.Email" class="form-control" />
-                <span asp-validation-for="user.Email" class="text-danger"></span>
+                <label asp-for="user.email" class="control-label"></label>
+                <input asp-for="user.email" class="form-control" />
+                <span asp-validation-for="user.email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.Password" class="control-label"></label>
-                <input asp-for="user.Password" class="form-control" type="password" />
-                <span asp-validation-for="user.Password" class="text-danger"></span>
+                <label asp-for="user.password" class="control-label"></label>
+                <input asp-for="user.password" class="form-control" type="password" value="@Model.user.password" />
+                <span asp-validation-for="user.password" class="text-danger"></span>
             </div>
 
             <!-- Address Fields -->
@@ -60,7 +70,7 @@
                 <label asp-for="userAddress.pinCode" class="control-label"></label>
                 <input asp-for="userAddress.pinCode" class="form-control" />
                 <span asp-validation-for="userAddress.pinCode" class="text-danger"></span>
-            </div>            
+            </div>
             <div class="form-group">
                 <label asp-for="userAddress.address" class="control-label"></label>
                 <input asp-for="userAddress.address" class="form-control" />
@@ -69,42 +79,42 @@
 
             <!-- Dropdowns -->
             <div class="form-group">
-                <label asp-for="user.RoleId" class="control-label"></label>
-                <select asp-for="user.RoleId" class="form-control">
+                <label asp-for="user.roleId" class="control-label"></label>
+                <select asp-for="user.roleId" class="form-control">
                     <option value="">Select Role</option>
                     @foreach (var role in Model.userRoles)
                     {
-                        <option value="@role.RoleId">@role.RoleName</option>
+                        <option value="@role.roleId">@role.roleName</option>
                     }
                 </select>
-                <span asp-validation-for="user.RoleId" class="text-danger"></span>
+                <span asp-validation-for="user.roleId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.AccountType" class="control-label"></label>
-                <select asp-for="user.AccountType" class="form-control">
+                <label asp-for="user.accountType" class="control-label"></label>
+                <select asp-for="user.accountType" class="form-control">
                     <option value="">Select Account Type</option>
                     @foreach (var type in Model.accountTypes)
                     {
-                        <option value="@type.AccoutnTypeId">@type.AccountTypeName</option>
+                        <option value="@type.accountTypeId">@type.accountTypeName</option>
                     }
                 </select>
-                <span asp-validation-for="user.AccountType" class="text-danger"></span>
+                <span asp-validation-for="user.accountType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="user.BankId" class="control-label"></label>
-                <select asp-for="user.BankId" class="form-control">
+                <label asp-for="user.bankId" class="control-label"></label>
+                <select asp-for="user.bankId" class="form-control">
                     <option value="">Select Bank</option>
                     @foreach (var bank in Model.banks)
                     {
-                        <option value="@bank.BankId">@bank.BankName</option>
+                        <option value="@bank.bankId">@bank.bankName</option>
                     }
                 </select>
-                <span asp-validation-for="user.BankId" class="text-danger"></span>
+                <span asp-validation-for="user.bankId" class="text-danger"></span>
             </div>
 
             <!-- Submit Button -->
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="@pageMethod" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -6,9 +6,9 @@ namespace BankingApplication.Models
     public class UserRole
     {
         [Key]
-        public int RoleId { get; set; }
-        public string RoleName { get; set; }
+        public int roleId { get; set; }
+        public string roleName { get; set; }
 
-        public virtual ICollection<User> Users { get; set; }    
+        public virtual ICollection<User> users { get; set; }    
     }
 }

@@ -25,23 +25,30 @@ namespace BankingApplication.Data.FluentAPI_Configurations.UserConfigurations
             //one-to-many
             builder
            .HasOne(u => u.Role)
-           .WithMany(r => r.Users)
-           .HasForeignKey(u => u.RoleId)
+           .WithMany(r => r.users)
+           .HasForeignKey(u => u.roleId)
            .OnDelete(DeleteBehavior.NoAction);
 
             //one-to-many
             builder
            .HasOne(u => u.Bank)
-           .WithMany(b => b.Users)
-           .HasForeignKey(u => u.BankId)
+           .WithMany(b => b.users)
+           .HasForeignKey(u => u.bankId)
            .OnDelete(DeleteBehavior.NoAction);
 
             //one-to-many
             builder
            .HasOne(u => u.UserAccount)
-           .WithMany(b => b.Users)
-           .HasForeignKey(u => u.AccountType)
+           .WithMany(b => b.users)
+           .HasForeignKey(u => u.accountType)
            .OnDelete(DeleteBehavior.NoAction);
+
+            //one-to-many
+            builder
+            .HasOne(u => u.Address)
+            .WithMany(a => a.users)
+            .HasForeignKey(u => u.addressId)
+            .OnDelete(DeleteBehavior.NoAction);
         }
     }
 

@@ -31,17 +31,17 @@ namespace BankingApplication.Controllers
 
             var usersWithAccountType = (from us in users
                                         join at in accountTypes
-                                        on us.AccountType equals at.AccoutnTypeId
+                                        on us.accountType equals at.accountTypeId
                                         join bk in banks
-                                        on us.BankId equals bk.BankId
+                                        on us.bankId equals bk.bankId
                                         join ur in userRoles
-                                        on us.RoleId equals ur.RoleId
+                                        on us.roleId equals ur.roleId
                                         select new User_AccountType()
                                         {
                                             user = us,
-                                            accountType = at.AccountTypeName,
-                                            userBank = bk.BankName,
-                                            userRole = ur.RoleName
+                                            accountType = at.accountTypeName,
+                                            userBank = bk.bankName,
+                                            userRole = ur.roleName
                                         }).ToList();
 
             return View(usersWithAccountType);
@@ -59,7 +59,8 @@ namespace BankingApplication.Controllers
                 .Include(u => u.Role)
                 .Include(u => u.Bank)
                 .Include(u => u.UserAccount)
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .Include(u=>u.Address)
+                .FirstOrDefaultAsync(m => m.userId == id);
 
             if (user == null)
             {
@@ -84,6 +85,7 @@ namespace BankingApplication.Controllers
                 userAddress = new Address()
             };
 
+            ViewData["Method"] = "Create";
             return View(Users_BanksModel);
         }
 
@@ -102,11 +104,11 @@ namespace BankingApplication.Controllers
                 _context.Add(address);
                 await _context.SaveChangesAsync();
 
-                user.AddressId = address.addressId;
+                user.addressId = address.addressId;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
 
-                address.userId = user.UserId;
+                address.userId = user.userId;
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -123,6 +125,7 @@ namespace BankingApplication.Controllers
                 userAddress = new Address()
             };
 
+            ViewData["Method"] = "Create";
             return View(Users_BanksModel);
         }
 
@@ -134,12 +137,31 @@ namespace BankingApplication.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
+            var user = await _context.Users
+                                     .Include(u=>u.Role)
+                                     .Include(u=>u.UserAccount)
+                                     .Include(u=>u.Bank)
+                                     .Include(u=>u.Address)
+                                     .FirstOrDefaultAsync(u=>u.userId==id);
             if (user == null)
             {
                 return NotFound();
             }
-            return View(user);
+
+            IQueryable<Bank> banks = _context.Banks;
+            IQueryable<AccountType> accountTypes = _context.AccountTypes;
+            IQueryable<UserRole> userRoles = _context.UserRoles;
+            var Users_BanksModel = new User_CreateView()
+            {
+                user = user,
+                banks = banks,
+                accountTypes = accountTypes,
+                userRoles = userRoles,
+                userAddress = user.Address
+            };
+
+            ViewData["Method"] = "Edit";
+            return View("Create",Users_BanksModel);
         }
 
         // POST: Users/Edit/5
@@ -147,23 +169,51 @@ namespace BankingApplication.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,UserName,FirstName,LastName,RoleId,Email,Password,AccountType,CurrentBalance,BankId")] User user)
+        public async Task<IActionResult> Edit(User_CreateViewDTO userWithFullDetails)
         {
-            if (id != user.UserId)
+            IQueryable<Bank> banks = _context.Banks;
+            IQueryable<AccountType> accountTypes = _context.AccountTypes;
+            IQueryable<UserRole> userRoles = _context.UserRoles;
+            var Users_BanksModel = new User_CreateView()
             {
-                return NotFound();
-            }
+                user = userWithFullDetails.user,
+                banks = banks,
+                accountTypes = accountTypes,
+                userRoles = userRoles,
+                userAddress = userWithFullDetails.user.Address
+            };
+
+            ViewData["Method"] = "Edit";
 
             if (ModelState.IsValid)
             {
+                using var transaction = _context.Database.BeginTransaction();
                 try
                 {
-                    _context.Update(user);
+                    var address = userWithFullDetails.userAddress;
+                    var user = userWithFullDetails.user;
+
+                    if(user.userId==0 || address.addressId == 0)
+                    {
+                        await transaction.RollbackAsync();
+                        //send a custom message on the screen like Server Error
+                        return View("Create", Users_BanksModel);
+                    }
+                    _context.Addresses.Update(address);
+
+                    _context.Users.Update(user);
+
                     await _context.SaveChangesAsync();
+
+                    //commit transaction
+                    await transaction.CommitAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserId))
+                    //rollback the transaction
+                    await transaction.RollbackAsync();
+
+                    if (!UserExists(userWithFullDetails.user.userId))
                     {
                         return NotFound();
                     }
@@ -174,7 +224,9 @@ namespace BankingApplication.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+
+
+            return View("Create", Users_BanksModel);
         }
 
         // GET: Users/Delete/5
@@ -186,7 +238,7 @@ namespace BankingApplication.Controllers
             }
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .FirstOrDefaultAsync(m => m.userId == id);
             if (user == null)
             {
                 return NotFound();
@@ -201,9 +253,11 @@ namespace BankingApplication.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var user = await _context.Users.FindAsync(id);
+            var address = await _context.Addresses.FindAsync(user.addressId);
             if (user != null)
             {
                 _context.Users.Remove(user);
+                _context.Addresses.Remove(address);
             }
 
             await _context.SaveChangesAsync();
@@ -212,7 +266,7 @@ namespace BankingApplication.Controllers
 
         private bool UserExists(int id)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _context.Users.Any(e => e.userId == id);
         }
     }
 }

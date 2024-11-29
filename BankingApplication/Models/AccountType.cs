@@ -5,11 +5,11 @@ namespace BankingApplication.Models
     public class AccountType
     {
         [Key]
-        public int AccoutnTypeId { get; set; }
+        public int accountTypeId { get; set; }
         [Required]
-        public string AccountTypeName { get; set; }
+        public string accountTypeName { get; set; }
 
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<User> users { get; set; }
 
     }
 }

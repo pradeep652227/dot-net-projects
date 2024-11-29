@@ -2,15 +2,15 @@
 {
     public class Bank
     {
-        public int BankId { get; set; }
+        public int bankId { get; set; }
 
-        public string BankName { get; set; }
-        public string City { get; set; }
-        public string LandMark { get; set; }
-        public string PINCode { get; set; }
-        public string State { get; set; }
-        public string Country { get; set; }
+        public string bankName { get; set; }
+        public string city { get; set; }
+        public string landMark { get; set; }
+        public string pinCode { get; set; }
+        public string state { get; set; }
+        public string country { get; set; }
 
-        public virtual ICollection<User> Users { get; set; }
+        public virtual ICollection<User> users { get; set; }
     }
 }
